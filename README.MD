@@ -29,8 +29,8 @@ So, you are welcome.
 * [x] ~~AND Logic Gate + Tests~~
 * [x] ~~OR Logic Gate + Tests~~
 * [x] ~~XOR Logic Gate + Tests~~
-* [ ] Half Adder + Tests
-* [ ] Full Adder + Tests
+* [x] ~~Half Adder + Tests~~
+* [x] ~~Full Adder + Tests~~
 * [ ] Ripple Adder + Tests
 * [ ] Assemble ALU + Tests
 
