@@ -20,12 +20,14 @@ So, you are welcome.
     or_gate.rb
     xor_gate.rb
 ./alu
+    half_adder.rb
+    full_adder.rb
     
 ```
 
 
 ## TODO:
-* [x] ~~Add conductors and transistors + Tests~~
+* [x] ~~Add conductors, joins, and transistors + Tests~~
 * [x] ~~AND Logic Gate + Tests~~
 * [x] ~~OR Logic Gate + Tests~~
 * [x] ~~XOR Logic Gate + Tests~~
