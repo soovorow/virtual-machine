@@ -6,9 +6,11 @@ require_relative '../electronics/join'
 class OrGate
 
   def initialize(phase, alpha, betta, out)
-    @alpha_npn_transistor = NPNTransistor.new phase, alpha, Conductor.new
-    @betta_npn_transistor = NPNTransistor.new phase, betta, Conductor.new
-    @join = Join.new [@alpha_npn_transistor.emitter, @betta_npn_transistor.emitter], [out]
+    alpha_emitter = Conductor.new
+    betta_emitter = Conductor.new
+    @alpha_npn_transistor = NPNTransistor.new phase, alpha, alpha_emitter
+    @betta_npn_transistor = NPNTransistor.new phase, betta, betta_emitter
+    @join = Join.new [alpha_emitter, betta_emitter], [out]
   end
 
   def debug
