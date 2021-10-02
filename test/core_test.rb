@@ -1,6 +1,7 @@
 require 'minitest/autorun'
 
 require_relative '../machine'
+require_relative '../electronics/bus'
 require_relative '../electronics/npn_transistor'
 require_relative '../electronics/pnp_transistor'
 require_relative '../logic-gates/and_gate'
@@ -8,6 +9,7 @@ require_relative '../logic-gates/or_gate'
 require_relative '../logic-gates/xor_gate'
 require_relative '../alu/half_adder'
 require_relative '../alu/full_adder'
+require_relative '../alu/ripple_adder'
 
 class CoreTest < Minitest::Test
   def setup
@@ -18,10 +20,10 @@ class CoreTest < Minitest::Test
   def test_npn_transistors
     t = NPNTransistor.new @machine.power.out, Conductor.new, Conductor.new
 
-    t.base.current = :on
+    t.base.current = 1
     assert_equal(1, t.emitter.current, 'NPN Transistor w/ base current must emit 1')
 
-    t.base.current = :off
+    t.base.current = 0
     assert_equal(0, t.emitter.current, 'NPN Transistor w/o base current must emit 0')
   end
 
@@ -200,4 +202,30 @@ class CoreTest < Minitest::Test
     assert_equal(1, sum.current)
   end
 
+  def test_ripple_adder
+
+    v = @machine.power.out
+    bus_a = Bus.new
+    bus_b = Bus.new
+    c_in = Conductor.new
+    bus_sum = Bus.new
+    c_out = Conductor.new
+
+    ra = RippleAdder.new v, bus_a, bus_b, c_in, bus_sum, c_out
+
+    bus_a.data_as_string = '00000001'
+    bus_b.data_as_string = '00000001'
+    assert_equal('00000010', bus_sum.to_string, "00000001 + 00000001 = 00000010")
+
+    bus_a.data_as_string = '11001000' # 200
+    bus_b.data_as_string = '00110010' # 50
+    assert_equal('11111010', bus_sum.to_string, "11001000 + 00110010 = 11111010") # 250
+
+    bus_a.data_as_string = '11111111'
+    bus_b.data_as_string = '11111111'
+    assert_equal('11111110', bus_sum.to_string, "11111111 + 11111111 = 11111111")
+    assert_equal(1, c_out.current, "11111111 + 11111111 set carry out to 1")
+
+    ra.debug
+  end
 end

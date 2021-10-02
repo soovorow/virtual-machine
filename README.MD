@@ -1,7 +1,14 @@
 # Virtual Machine
+
+
+## Why?
 I started this project to learn how CPU is really works.
-Plus, to learn ruby to investigate metasploit framework. 
-So, you are welcome. 
+
+## Why Ruby?
+I want to get deeper into InfoSec.
+Metasploit framework written in Ruby.
+So I choose Ruby to become familiar with it. 
+So, just it :)
 
 ## Acknowledgments
 * Thanks to http://www.simplecpudesign.com/
@@ -10,11 +17,12 @@ So, you are welcome.
 ## Project
 ```
 ./electrconics          core physical componets
+    power.rb            
     conductor.rb        
+    bus.rb       
     join.rb        
     npn_transistor.rb       
-    pnp_transistor.rb       
-    power.rb            
+    pnp_transistor.rb
 ./logic-gates           core logic components
     and_gate.rb
     or_gate.rb
@@ -22,7 +30,7 @@ So, you are welcome.
 ./alu
     half_adder.rb
     full_adder.rb
-    
+    ripple_adder.rb
 ```
 
 
@@ -33,7 +41,8 @@ So, you are welcome.
 * [x] ~~XOR Logic Gate + Tests~~
 * [x] ~~Half Adder + Tests~~
 * [x] ~~Full Adder + Tests~~
-* [ ] Ripple Adder + Tests
+* [x] ~~Ripple Adder + Tests~~
+  
 * [ ] Assemble ALU + Tests
 
 ## Out Of Scope:

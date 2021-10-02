@@ -11,14 +11,14 @@ class NPNTransistor
 
     @collector.listener.push method(:update)
     @base.listener.push method(:update)
+    update
   end
 
   def debug
     print self, "\n"
-    print "in: \t", @collector.current, "\n"
-    print "sw: \t", @base.current, "\n"
-    print "out: \t", @emitter.current, "\n"
-    print "\n"
+    print "in: \t", @collector.current, "\t", @collector, "\n"
+    print "sw: \t", @base.current, "\t", @base, "\n"
+    print "out: \t", @emitter.current, "\t", @emitter, "\n"
   end
 
   private

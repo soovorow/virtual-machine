@@ -27,8 +27,8 @@ class Join
 
   def debug
     print self, "\n"
-    @in.each { |c| print "in:\t\t", c.current, "\n" }
-    @out.each { |c| print "out:\t", c.current, "\n" }
+    @in.each { |c| print "in:\t\t", c.current, "\t", c, "\n" }
+    @out.each { |c| print "out:\t", c.current, "\t", c, "\n" }
     print "\n"
   end
 end

@@ -11,14 +11,14 @@ class PNPTransistor
 
     @emitter.listener.push method(:update)
     @base.listener.push method(:update)
+    update
   end
 
   def debug
     print self, "\n"
-    print "in: \t", @emitter.current, "\n"
-    print "sw: \t", @base.current, "\n"
-    print "out: \t", @collector.current, "\n"
-    print "\n"
+    print "in: \t", @emitter.current, "\t", @emitter, "\n"
+    print "sw: \t", @base.current, "\t", @base, "\n"
+    print "out: \t", @collector.current, "\t", @collector, "\n"
   end
 
   private
