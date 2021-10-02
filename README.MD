@@ -1,6 +1,5 @@
 # Virtual Machine
 
-
 ## Why?
 I started this project to learn how CPU is really works.
 
@@ -16,34 +15,44 @@ So, just it :)
 
 ## Project
 ```
-./electrconics          core physical componets
-    power.rb            
-    conductor.rb        
-    bus.rb       
-    join.rb        
-    npn_transistor.rb       
-    pnp_transistor.rb
-./logic-gates           core logic components
-    and_gate.rb
-    or_gate.rb
-    xor_gate.rb
-./alu
-    half_adder.rb
-    full_adder.rb
-    ripple_adder.rb
+TBD
 ```
 
 
 ## TODO:
-* [x] ~~Add conductors, joins, and transistors + Tests~~
+Electronics
+* [x] ~~Conductor and Join~~ + Tests
+* [x] ~~Buses + Tests~~
+* [x] ~~Transistors + Tests~~
+
+Logic
 * [x] ~~AND Logic Gate + Tests~~
 * [x] ~~OR Logic Gate + Tests~~
 * [x] ~~XOR Logic Gate + Tests~~
+* [x] ~~INV Logic Gate + Tests~~
+  
+MUX
+* [x] ~~Multiplxsers + Tests~~
+
+ALU
 * [x] ~~Half Adder + Tests~~
 * [x] ~~Full Adder + Tests~~
 * [x] ~~Ripple Adder + Tests~~
-  
-* [ ] Assemble ALU + Tests
+* [x] ~~ALU + Tests~~
+
+Memory
+* [ ] Registers
+* [ ] RAM
+
+Control Unit
+* [ ] Decoder
 
 ## Out Of Scope:
+Code Issues
+* [ ] Ruby Classes Autoload
+* [ ] Get rid of Nasty # frozen_string_literal: true  
+* [ ] Refactor weird ./alu/replicate.rb implementation
+  
+Farther Developmennt
+* [ ] DIV, MUL, etc. instructions for ALU
 * [ ] Real life electronic circuit

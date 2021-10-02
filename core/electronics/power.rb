@@ -1,6 +1,6 @@
 # frozen_string_literal: true
 
-require_relative './conductor'
+require_relative '../electronics/conductor'
 
 # Power Supply Unit
 class Power
