@@ -18,10 +18,10 @@ class ALU
 
 
     inv_result = Conductor.new
-    bus_01 = Bus.new
-    bus_02 = Bus.new
-    bus_03 = Bus.new
-    ripple_adder_sum_bus = Bus.new
+    bus_01 = Bus.new 8
+    bus_02 = Bus.new 8
+    bus_03 = Bus.new 8
+    ripple_adder_sum_bus = Bus.new 8
 
     @inv_gate = InvGate.new phase, @s4, inv_result
     @replicate = Replicate.new inv_result, bus_01

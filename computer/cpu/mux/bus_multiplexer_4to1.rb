@@ -11,8 +11,8 @@ class BusMultiplexer4to1
     @s_1 = s_1
     @bus_z = bus_z
 
-    bus_ab_to_z_a = Bus.new
-    bus_cd_to_z_b = Bus.new
+    bus_ab_to_z_a = Bus.new 8
+    bus_cd_to_z_b = Bus.new 8
 
     @ab_mux = BusMultiplexer2to1.new phase, @bus_a, @bus_b, @s_0, bus_ab_to_z_a
     @cd_mux = BusMultiplexer2to1.new phase, @bus_c, @bus_d, @s_0, bus_cd_to_z_b

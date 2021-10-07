@@ -2,7 +2,7 @@
 
 # Wire Hub
 class Join
-  attr_reader :in, :out
+  attr_reader :in, :phase
 
   def initialize(input, output)
     @in = input || []

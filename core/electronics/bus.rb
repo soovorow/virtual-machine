@@ -4,17 +4,15 @@
 class Bus
   attr_accessor :data
 
-  def initialize(data = nil)
-    @data = data || [
-      Conductor.new,
-      Conductor.new,
-      Conductor.new,
-      Conductor.new,
-      Conductor.new,
-      Conductor.new,
-      Conductor.new,
-      Conductor.new
-    ]
+  def initialize(size, data = nil)
+    if data == nil
+      @data = []
+      (1..size).each do
+        @data.push Conductor.new
+      end
+    else
+      @data = data
+    end
   end
 
   # @param [String] string

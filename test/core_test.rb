@@ -2,7 +2,8 @@
 
 require 'minitest/autorun'
 
-require_relative '../computer/machine'
+require_relative '../machine'
+require_relative '../computer/power/power'
 require_relative '../core/electronics/bus'
 require_relative '../core/electronics/npn_transistor'
 require_relative '../core/electronics/pnp_transistor'
@@ -10,6 +11,8 @@ require_relative '../core/logic/and_gate'
 require_relative '../core/logic/or_gate'
 require_relative '../core/logic/xor_gate'
 require_relative '../core/logic/inv_gate'
+require_relative '../core/logic/nand_gate'
+require_relative '../core/memory/fdce'
 require_relative '../computer/cpu/mux/bit_multiplexer_2to1'
 require_relative '../computer/cpu/mux/bus_multiplexer_2to1'
 require_relative '../computer/cpu/mux/bus_multiplexer_4to1'
@@ -20,17 +23,32 @@ require_relative '../computer/cpu/alu/full_adder'
 require_relative '../computer/cpu/alu/ripple_adder'
 require_relative '../computer/cpu/alu/alu'
 
+# Auto Tests
 class CoreTest < Minitest::Test
+
   def setup
-    @machine = Machine.new
-    @machine.power.turn :on
+    @machine = Machine.new 10
+    @machine.turn :on
+  end
+
+  def teardown
+    @machine.turn :off
   end
 
 
   # Electronics Tests
 
   def test_power
-    skip
+    assert_equal(1, @machine.power.phase.current, 'Machine power is turned on')
+  end
+
+  def test_clock
+    start = Time.now.to_i
+    delta = 1
+
+    while Time.now.to_i - start < delta
+
+    end
   end
 
   def test_conductor
@@ -46,7 +64,7 @@ class CoreTest < Minitest::Test
   end
 
   def test_npn_transistors
-    t = NPNTransistor.new @machine.power.out, Conductor.new, Conductor.new
+    t = NPNTransistor.new @machine.power.phase, Conductor.new, Conductor.new
 
     t.base.current = 1
     assert_equal(1, t.emitter.current, 'NPN Transistor w/ base current must emit 1')
@@ -56,7 +74,7 @@ class CoreTest < Minitest::Test
   end
 
   def test_pnp_transistors
-    t = PNPTransistor.new @machine.power.out, Conductor.new, Conductor.new
+    t = PNPTransistor.new @machine.power.phase, Conductor.new, Conductor.new
 
     t.base.current = :on
     assert_equal(0, t.collector.current, 'PNP Transistor w/ base current must collect 0')
@@ -69,7 +87,7 @@ class CoreTest < Minitest::Test
   # Logic Gates Tests
 
   def test_and_gate
-    v = @machine.power.out
+    v = @machine.power.phase
     a = Conductor.new
     b = Conductor.new
     z = Conductor.new
@@ -94,7 +112,7 @@ class CoreTest < Minitest::Test
   end
 
   def test_or_gate
-    v = @machine.power.out
+    v = @machine.power.phase
     a = Conductor.new
     b = Conductor.new
     z = Conductor.new
@@ -119,7 +137,7 @@ class CoreTest < Minitest::Test
   end
 
   def test_xor_gate
-    v = @machine.power.out
+    v = @machine.power.phase
     a = Conductor.new
     b = Conductor.new
     z = Conductor.new
@@ -145,7 +163,7 @@ class CoreTest < Minitest::Test
   end
 
   def test_inv_gate
-    v = @machine.power.out
+    v = @machine.power.phase
     a = Conductor.new
     z = Conductor.new
 
@@ -157,11 +175,36 @@ class CoreTest < Minitest::Test
     assert_equal(0, z.current)
   end
 
+  def test_nand_gate
+    v = @machine.power.phase
+    a = Conductor.new
+    b = Conductor.new
+    z = Conductor.new
+
+    NandGate.new v, a, b, z
+
+    a.current = 0
+    b.current = 0
+    assert_equal(1, z.current, '!(0 & 0) must equal 1')
+
+    a.current = 0
+    b.current = 1
+    assert_equal(1, z.current, '!(0 & 1) must equal 1')
+
+    a.current = 1
+    b.current = 0
+    assert_equal(1, z.current, '!(1 & 0) must equal 1')
+
+    a.current = 1
+    b.current = 1
+    assert_equal(0, z.current, '!(1 & 1) must equal 0')
+  end
+
 
   # MUX Tests
 
   def test_bit_mux_2to1
-    phase = @machine.power.out
+    phase = @machine.power.phase
     sel = Conductor.new
     alpha = Conductor.new
     betta = Conductor.new
@@ -212,11 +255,11 @@ class CoreTest < Minitest::Test
   end
 
   def test_bus_mux_2to1
-    phase = @machine.power.out
-    bus_a = Bus.new
-    bus_b = Bus.new
+    phase = @machine.power.phase
+    bus_a = Bus.new 8
+    bus_b = Bus.new 8
     sel = Conductor.new
-    bus_z = Bus.new
+    bus_z = Bus.new 8
 
     BusMultiplexer2to1.new phase, bus_a, bus_b, sel, bus_z
 
@@ -230,14 +273,14 @@ class CoreTest < Minitest::Test
   end
 
   def test_bus_mux_4to1
-    phase = @machine.power.out
-    bus_a = Bus.new
-    bus_b = Bus.new
-    bus_c = Bus.new
-    bus_d = Bus.new
+    phase = @machine.power.phase
+    bus_a = Bus.new 8
+    bus_b = Bus.new 8
+    bus_c = Bus.new 8
+    bus_d = Bus.new 8
     sel_0 = Conductor.new
     sel_1 = Conductor.new
-    bus_z = Bus.new
+    bus_z = Bus.new 8
 
     BusMultiplexer4to1.new phase, bus_a, bus_b, bus_c, bus_d, sel_0, sel_1, bus_z
 
@@ -267,10 +310,10 @@ class CoreTest < Minitest::Test
   # ALU Tests
 
   def test_bitwise_xor
-    v = @machine.power.out
-    bus_a = Bus.new
+    v = @machine.power.phase
+    bus_a = Bus.new 8
     en = Conductor.new
-    bus_z = Bus.new
+    bus_z = Bus.new 8
 
     BitwiseXor.new v, bus_a, en, bus_z
 
@@ -292,7 +335,7 @@ class CoreTest < Minitest::Test
   end
 
   def test_half_adder
-    v = @machine.power.out
+    v = @machine.power.phase
     a = Conductor.new
     b = Conductor.new
     carry_out = Conductor.new
@@ -322,7 +365,7 @@ class CoreTest < Minitest::Test
   end
 
   def test_full_adder
-    v = @machine.power.out
+    v = @machine.power.phase
     a = Conductor.new
     b = Conductor.new
     c_in = Conductor.new
@@ -382,11 +425,11 @@ class CoreTest < Minitest::Test
 
   def test_ripple_adder
 
-    v = @machine.power.out
-    bus_a = Bus.new
-    bus_b = Bus.new
+    v = @machine.power.phase
+    bus_a = Bus.new 8
+    bus_b = Bus.new 8
     c_in = Conductor.new
-    bus_sum = Bus.new
+    bus_sum = Bus.new 8
     c_out = Conductor.new
 
     ra = RippleAdder.new v, bus_a, bus_b, c_in, bus_sum, c_out
@@ -408,15 +451,15 @@ class CoreTest < Minitest::Test
   end
 
   def test_alu
-    v = @machine.power.out
-    bus_a = Bus.new
-    bus_b = Bus.new
+    v = @machine.power.phase
+    bus_a = Bus.new 8
+    bus_b = Bus.new 8
     s0 = Conductor.new # mux output
     s1 = Conductor.new # mux output
     s2 = Conductor.new # carry bit
     s3 = Conductor.new # xor bit: invert B
     s4 = Conductor.new # and bit: reset B to [ 0000 0000 ]
-    bus_alu = Bus.new
+    bus_alu = Bus.new 8
     c_out = Conductor.new
 
     alu = ALU.new v, bus_a, bus_b, s0, s1, s2, s3, s4, bus_alu, c_out
@@ -460,4 +503,51 @@ class CoreTest < Minitest::Test
 
     alu.debug
   end
+
+
+  # REG Tests
+
+  def test_fdce
+    phase = @machine.power.phase
+    clear = Conductor.new
+    clock_enabled = Conductor.new
+    data = Conductor.new
+    clock = @machine.clock.signal
+    quit = Conductor.new
+
+    FDCE.new phase, clear, clock_enabled, data, clock, quit
+
+    clear.current = 1
+    assert_equal(0, quit.current)
+
+    clear.current = 0
+    clock_enabled.current = 0
+    assert_equal(0, quit.current)
+
+    clear.current = 0
+    clock_enabled.current = 1
+    data.current = 1
+    clock.current = 1
+    assert_equal(1, quit.current)
+
+    clear.current = 0
+    clock_enabled.current = 0
+    assert_equal(1, quit.current)
+  end
+
+  def test_register_nibble
+    skip
+  end
+
+  def test_register_byte
+    skip
+  end
+
+  def test_register_half_word
+    skip
+  end
+
+
+
+
 end
