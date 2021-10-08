@@ -5,15 +5,20 @@ class Conductor
   attr_reader :current
   attr_accessor :listener
 
-  def initialize
+  def initialize(debug = false, msg = false)
     @current = 0
     @listener = []
+    @debug = debug
+    @msg = msg
   end
 
   # @param [Boolean] voltage
   def current=(voltage)
     @current = ([:on, 1].include?(voltage) ? 1 : 0)
     @listener.each(&:call)
+    if @debug != false
+      print @msg, "\n"
+    end
   end
 
   def on?

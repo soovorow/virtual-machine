@@ -27,8 +27,10 @@ require_relative '../computer/cpu/alu/alu'
 class CoreTest < Minitest::Test
 
   def setup
-    @machine = Machine.new 10
+    @machine = Machine.new 2
+    @machine.clock.debug = true
     @machine.turn :on
+
   end
 
   def teardown
@@ -503,51 +505,6 @@ class CoreTest < Minitest::Test
 
     alu.debug
   end
-
-
-  # REG Tests
-
-  def test_fdce
-    phase = @machine.power.phase
-    clear = Conductor.new
-    clock_enabled = Conductor.new
-    data = Conductor.new
-    clock = @machine.clock.signal
-    quit = Conductor.new
-
-    FDCE.new phase, clear, clock_enabled, data, clock, quit
-
-    clear.current = 1
-    assert_equal(0, quit.current)
-
-    clear.current = 0
-    clock_enabled.current = 0
-    assert_equal(0, quit.current)
-
-    clear.current = 0
-    clock_enabled.current = 1
-    data.current = 1
-    clock.current = 1
-    assert_equal(1, quit.current)
-
-    clear.current = 0
-    clock_enabled.current = 0
-    assert_equal(1, quit.current)
-  end
-
-  def test_register_nibble
-    skip
-  end
-
-  def test_register_byte
-    skip
-  end
-
-  def test_register_half_word
-    skip
-  end
-
-
 
 
 end

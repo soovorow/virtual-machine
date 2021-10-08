@@ -29,7 +29,7 @@ class ALU
     @bitwise_and_0 = BitwiseAnd.new phase, bus_01, bus_02, bus_03
     @ripple_adder = RippleAdder.new phase, @bus_a, bus_03, @s2, ripple_adder_sum_bus, @c_out
 
-    bitwise_and_out_bus = Bus.new # bitwise and 2 to mux b
+    bitwise_and_out_bus = Bus.new 8 # bitwise and 2 to mux b
     @bitwise_and_2 = BitwiseAnd.new phase, @bus_a, @bus_b, bitwise_and_out_bus
 
     @mux_bus_4to1 = BusMultiplexer4to1.new phase, ripple_adder_sum_bus, bitwise_and_out_bus, @bus_a, @bus_b, @s0, @s1, @bus_alu
